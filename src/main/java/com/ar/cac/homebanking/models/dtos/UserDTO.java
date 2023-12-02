@@ -1,9 +1,12 @@
 package com.ar.cac.homebanking.models.dtos;
 
+import com.ar.cac.homebanking.models.Account;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,10 +19,14 @@ public class UserDTO {
 
     private String password;
 
-    private String name;
+    private String nombreUsuario;
 
-    private String surname;
+    private String fechaDeNacimiento;
+
+    private String domicilio;
 
     private String dni;
+
+    private List<Account> lista;
 
 }
