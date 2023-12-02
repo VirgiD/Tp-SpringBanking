@@ -24,13 +24,18 @@ public class User {
     @Column(name = "contrasena")
     private String password;
 
-    @Column(name = "nombre")
-    private String name;
+    @Column(name = "nombreUsuario")
+    private String nombreUsuario;
 
-    @Column(name = "apellido")
-    private String surname;
+    @Column(name = "fechaDeNacimiento")
+    private String fechaDeNacimiento;
+
+    @Column(name = "domicilio")
+    private String domicilio;
 
     private String dni;
+
+    //private List<Account> lista;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts;

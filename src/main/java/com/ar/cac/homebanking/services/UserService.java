@@ -64,12 +64,16 @@ public class UserService {
             // Validar qué datos no vienen en null para setearlos al objeto ya creado
 
             // Logica del Patch
-            if (dto.getName() != null){
-                userToModify.setName(dto.getName());
+            if (dto.getNombreUsuario() != null){
+                userToModify.setNombreUsuario(dto.getNombreUsuario());
             }
 
-            if (dto.getSurname() != null){
-                userToModify.setSurname(dto.getSurname());
+            if (dto.getFechaDeNacimiento() != null){
+                userToModify.setFechaDeNacimiento(dto.getFechaDeNacimiento());
+            }
+
+            if (dto.getDomicilio() != null){
+                userToModify.setDomicilio(dto.getDomicilio());
             }
 
             if (dto.getEmail() != null){

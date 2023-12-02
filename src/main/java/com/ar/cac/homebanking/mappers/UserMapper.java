@@ -11,8 +11,9 @@ public class UserMapper {
 
     public static User dtoToUser(UserDTO dto){
         User user = new User();
-        user.setName(dto.getName());
-        user.setSurname(dto.getSurname());
+        user.setNombreUsuario(dto.getNombreUsuario());
+        user.setFechaDeNacimiento(dto.getFechaDeNacimiento());
+        user.setDomicilio(dto.getDomicilio());
         user.setDni(dto.getDni());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
@@ -22,8 +23,9 @@ public class UserMapper {
     public static UserDTO userToDto(User user){
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setSurname(user.getSurname());
+        dto.setNombreUsuario(user.getNombreUsuario());
+        dto.setFechaDeNacimiento(user.getFechaDeNacimiento());
+        dto.setDomicilio(user.getDomicilio());
         dto.setDni(user.getDni());
         dto.setEmail(user.getEmail());
         dto.setPassword(user.getPassword());
