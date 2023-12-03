@@ -1,7 +1,10 @@
 package com.ar.cac.homebanking.mappers;
 
 import com.ar.cac.homebanking.models.Account;
+import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.AccountDTO;
+import com.ar.cac.homebanking.repositories.AccountRepository;
+import com.ar.cac.homebanking.repositories.UserRepository;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -15,6 +18,7 @@ public class AccountMapper {
         dto.setType(account.getType());
         dto.setAmount(account.getAmount());
         dto.setId(account.getId());
+        dto.setUsuarioId(account.getOwner().getId());
         return dto;
     }
 
@@ -24,6 +28,7 @@ public class AccountMapper {
         account.setType(dto.getType());
         account.setCbu(dto.getCbu());
         account.setAmount(dto.getAmount());
+        //account.setOwner(dto.getUsuarioId());
         return account;
     }
 }

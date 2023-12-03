@@ -9,6 +9,7 @@ import com.ar.cac.homebanking.models.dtos.AccountDTO;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.models.enums.AccountType;
 import com.ar.cac.homebanking.repositories.AccountRepository;
+import com.ar.cac.homebanking.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,8 +21,13 @@ public class AccountService {
 
     private final AccountRepository repository;
 
-    public AccountService(AccountRepository repository){
+    private final UserRepository userRepository;
+
+
+
+    public AccountService(AccountRepository repository, UserRepository userRepository){
         this.repository = repository;
+        this.userRepository = userRepository;
     }
     public List<AccountDTO> getAccounts() {
         List<Account> accounts = repository.findAll();
@@ -31,10 +37,16 @@ public class AccountService {
     }
 
     public AccountDTO createAccount(AccountDTO dto) {
-        // TODO: REFACTOR
-        //dto.setType(AccountType.SAVINGS_BANK);
-        dto.setAmount(BigDecimal.ZERO);
-        Account newAccount = repository.save(AccountMapper.dtoToAccount(dto));
+        User user = userRepository.findById(dto.getUsuarioId()).
+                orElseThrow(() -> new UserNotExistsException("User not found with id: " + dto.getUsuarioId()));
+        Account newAccount = new Account();
+        newAccount.setOwner(user);
+        newAccount.setType(dto.getType());
+        newAccount.setCbu(dto.getCbu());
+        newAccount.setAlias(dto.getAlias());
+        newAccount.setAmount(dto.getAmount());
+        newAccount = repository.save(newAccount);
+
         return AccountMapper.accountToDto(newAccount);
     }
 
