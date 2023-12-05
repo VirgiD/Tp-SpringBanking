@@ -3,6 +3,7 @@ package com.ar.cac.homebanking.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,5 +39,12 @@ public class User {
     //private List<Account> lista;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<>();
+
+    public void addAccount(Account account) {
+        accounts.add(account);
+        account.setOwner(this);
+    }
+
+
 }

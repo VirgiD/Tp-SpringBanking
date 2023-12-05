@@ -2,15 +2,21 @@ package com.ar.cac.homebanking.services;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.UserMapper;
+import com.ar.cac.homebanking.models.Account;
 import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
+import com.ar.cac.homebanking.models.enums.AccountType;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,16 +36,52 @@ public class UserService {
                 .collect(Collectors.toList());
         return usersDtos;
     }
+    private String generarAliasAleatorio() {
+        List<String> palabras = Arrays.asList("sol", "luna", "estrella", "rio", "montaña"); // Puedes agregar más palabras aquí
+        Random random = new Random();
+        StringBuilder alias = new StringBuilder();
+
+        for (int i = 0; i < 3; i++) {
+            int indicePalabra = random.nextInt(palabras.size());
+            alias.append(palabras.get(indicePalabra));
+
+            if (i < 2) {
+                alias.append(".");
+            }
+        }
+
+        return alias.toString();
+    }
+    private String generarCbuAleatorio() {
+        StringBuilder cbu = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < 22; i++) {
+            cbu.append(random.nextInt(10));
+        }
+
+        return cbu.toString();
+    }
 
     public UserDTO createUser(UserDTO userDto){
         User userValidated = validateUserByEmail(userDto);
         if (userValidated == null){
+            User NewUser = UserMapper.dtoToUser(userDto);
+            NewUser.setAccounts(new ArrayList<>());
+            Account newAccount = new Account();
+            newAccount.setType(AccountType.SAVINGS_BANK);
+            newAccount.setCbu(generarCbuAleatorio());
+            newAccount.setAlias(generarAliasAleatorio());
+            newAccount.setAmount(BigDecimal.valueOf(00.0));
             User userSaved = repository.save(UserMapper.dtoToUser(userDto));
+            // Asignar la cuenta al usuario
+            userSaved.addAccount(newAccount);
+            // Guardar los cambios en la base de datos
+            repository.save(userSaved);
             return UserMapper.userToDto(userSaved);
         } else{
             throw new UserNotExistsException("Usuario con mail: " + userDto.getEmail() + " ya existe");
         }
-
     }
 
 
