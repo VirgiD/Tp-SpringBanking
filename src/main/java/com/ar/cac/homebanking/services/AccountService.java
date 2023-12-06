@@ -13,8 +13,13 @@ import com.ar.cac.homebanking.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
+
+import static com.ar.cac.homebanking.models.Account.generarAliasAleatorio;
+import static com.ar.cac.homebanking.models.Account.generarCbuAleatorio;
 
 @Service
 public class AccountService {
@@ -36,14 +41,17 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
+
     public AccountDTO createAccount(AccountDTO dto) {
         User user = userRepository.findById(dto.getUsuarioId()).
                 orElseThrow(() -> new UserNotExistsException("User not found with id: " + dto.getUsuarioId()));
         Account newAccount = new Account();
+        String alias = generarAliasAleatorio();
+        String cbu = generarCbuAleatorio();
         newAccount.setOwner(user);
         newAccount.setType(dto.getType());
-        newAccount.setCbu(dto.getCbu());
-        newAccount.setAlias(dto.getAlias());
+        newAccount.setCbu(generarCbuAleatorio());
+        newAccount.setAlias(generarAliasAleatorio());
         newAccount.setAmount(dto.getAmount());
         newAccount = repository.save(newAccount);
 

@@ -36,32 +36,7 @@ public class UserService {
                 .collect(Collectors.toList());
         return usersDtos;
     }
-    private String generarAliasAleatorio() {
-        List<String> palabras = Arrays.asList("sol", "luna", "estrella", "rio", "montaña"); // Puedes agregar más palabras aquí
-        Random random = new Random();
-        StringBuilder alias = new StringBuilder();
 
-        for (int i = 0; i < 3; i++) {
-            int indicePalabra = random.nextInt(palabras.size());
-            alias.append(palabras.get(indicePalabra));
-
-            if (i < 2) {
-                alias.append(".");
-            }
-        }
-
-        return alias.toString();
-    }
-    private String generarCbuAleatorio() {
-        StringBuilder cbu = new StringBuilder();
-        Random random = new Random();
-
-        for (int i = 0; i < 22; i++) {
-            cbu.append(random.nextInt(10));
-        }
-
-        return cbu.toString();
-    }
 
     public UserDTO createUser(UserDTO userDto){
         User userValidated = validateUserByEmail(userDto);
@@ -70,8 +45,9 @@ public class UserService {
             NewUser.setAccounts(new ArrayList<>());
             Account newAccount = new Account();
             newAccount.setType(AccountType.SAVINGS_BANK);
-            newAccount.setCbu(generarCbuAleatorio());
-            newAccount.setAlias(generarAliasAleatorio());
+            newAccount.setCbu(Account.generarCbuAleatorio());
+            newAccount.setAlias(Account.generarAliasAleatorio());
+
             newAccount.setAmount(BigDecimal.valueOf(00.0));
             User userSaved = repository.save(UserMapper.dtoToUser(userDto));
             // Asignar la cuenta al usuario
