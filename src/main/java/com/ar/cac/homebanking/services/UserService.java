@@ -3,6 +3,7 @@ package com.ar.cac.homebanking.services;
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.UserMapper;
 import com.ar.cac.homebanking.models.Account;
+import com.ar.cac.homebanking.models.GeneradorCbuAlias;
 import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.models.enums.AccountType;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -41,19 +43,18 @@ public class UserService {
     public UserDTO createUser(UserDTO userDto){
         User userValidated = validateUserByEmail(userDto);
         if (userValidated == null){
-            User NewUser = UserMapper.dtoToUser(userDto);
-            NewUser.setAccounts(new ArrayList<>());
+            User newUser = UserMapper.dtoToUser(userDto);
+            newUser.setAccounts(new ArrayList<>());
             Account newAccount = new Account();
             newAccount.setType(AccountType.SAVINGS_BANK);
-            newAccount.setCbu(Account.generarCbuAleatorio());
-            newAccount.setAlias(Account.generarAliasAleatorio());
-
+            newAccount.setCbu(GeneradorCbuAlias.generarCbuAleatorio());
+            newAccount.setAlias(GeneradorCbuAlias.generarAliasAleatorio());
             newAccount.setAmount(BigDecimal.valueOf(00.0));
-            User userSaved = repository.save(UserMapper.dtoToUser(userDto));
-            // Asignar la cuenta al usuario
-            userSaved.addAccount(newAccount);
-            // Guardar los cambios en la base de datos
-            repository.save(userSaved);
+            newUser.agregarCuenta(newAccount);
+            // Guardar el usuario y la cuenta en la base de datos
+            User userSaved = repository.save(newUser);
+
+
             return UserMapper.userToDto(userSaved);
         } else{
             throw new UserNotExistsException("Usuario con mail: " + userDto.getEmail() + " ya existe");

@@ -2,24 +2,19 @@ package com.ar.cac.homebanking.services;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.AccountMapper;
-import com.ar.cac.homebanking.mappers.UserMapper;
 import com.ar.cac.homebanking.models.Account;
+import com.ar.cac.homebanking.models.GeneradorCbuAlias;
 import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.AccountDTO;
-import com.ar.cac.homebanking.models.dtos.UserDTO;
-import com.ar.cac.homebanking.models.enums.AccountType;
 import com.ar.cac.homebanking.repositories.AccountRepository;
 import com.ar.cac.homebanking.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
-import static com.ar.cac.homebanking.models.Account.generarAliasAleatorio;
-import static com.ar.cac.homebanking.models.Account.generarCbuAleatorio;
 
 @Service
 public class AccountService {
@@ -29,12 +24,15 @@ public class AccountService {
     private final UserRepository userRepository;
 
 
-
     public AccountService(AccountRepository repository, UserRepository userRepository){
         this.repository = repository;
         this.userRepository = userRepository;
     }
-    public List<AccountDTO> getAccounts() {
+    @Transactional
+    public List<AccountDTO> getAccountsByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotExistsException("User not found with id: " + userId));
+
         List<Account> accounts = repository.findAll();
         return accounts.stream()
                 .map(AccountMapper::accountToDto)
@@ -46,12 +44,12 @@ public class AccountService {
         User user = userRepository.findById(dto.getUsuarioId()).
                 orElseThrow(() -> new UserNotExistsException("User not found with id: " + dto.getUsuarioId()));
         Account newAccount = new Account();
-        String alias = generarAliasAleatorio();
-        String cbu = generarCbuAleatorio();
+        String alias = GeneradorCbuAlias.generarAliasAleatorio();
+        String cbu = GeneradorCbuAlias.generarCbuAleatorio();
         newAccount.setOwner(user);
         newAccount.setType(dto.getType());
-        newAccount.setCbu(generarCbuAleatorio());
-        newAccount.setAlias(generarAliasAleatorio());
+        newAccount.setCbu(cbu);
+        newAccount.setAlias(alias);
         newAccount.setAmount(dto.getAmount());
         newAccount = repository.save(newAccount);
 
@@ -102,4 +100,6 @@ public class AccountService {
         }
         return null;
     }
+
+
 }
