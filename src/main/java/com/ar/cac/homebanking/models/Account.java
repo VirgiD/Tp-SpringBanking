@@ -3,20 +3,15 @@ package com.ar.cac.homebanking.models;
 
 import com.ar.cac.homebanking.models.enums.AccountType;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 @Entity
 @Table(name = "cuentas")
 @Getter
 @Setter
-
 public class Account {
 
     @Id
@@ -34,6 +29,7 @@ public class Account {
 
 
    // private Long idUsuario;
+
 
     @ManyToOne
     @JoinColumn(name = "id_owner")

@@ -2,43 +2,28 @@ package com.ar.cac.homebanking.services;
 
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.UserMapper;
-import com.ar.cac.homebanking.models.Account;
-import com.ar.cac.homebanking.models.GeneradorCbuAlias;
 import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
-import com.ar.cac.homebanking.models.enums.AccountType;
-import com.ar.cac.homebanking.repositories.AccountRepository;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     // Inyectar una instancia del Repositorio
-    private final UserRepository userRepository;
-    private final AccountRepository accountRepository;
-
     @Autowired
-    public UserService(UserRepository userRepository, AccountRepository accountRepository) {
-        this.userRepository = userRepository;
-        this.accountRepository = accountRepository;
-    }
+    private UserRepository repository;
 
     // Metodos
 
     public List<UserDTO> getUsers(){
         // Obtengo la lista de la entidad usuario de la db
-        List<User> users = userRepository.findAll();
+        List<User> users = repository.findAll();
         // Mapear cada usuario de la lista hacia un dto
          List<UserDTO> usersDtos = users.stream()
                 .map(UserMapper::userToDto)
@@ -46,45 +31,27 @@ public class UserService {
         return usersDtos;
     }
 
-
     public UserDTO createUser(UserDTO userDto){
         User userValidated = validateUserByEmail(userDto);
         if (userValidated == null){
-            User newUser = UserMapper.dtoToUser(userDto);
-            newUser.setAccounts(new ArrayList<>());
-            Account newAccount = new Account();
-            newAccount.setType(AccountType.SAVINGS_BANK);
-            newAccount.setCbu(GeneradorCbuAlias.generarCbuAleatorio());
-            newAccount.setAlias(GeneradorCbuAlias.generarAliasAleatorio());
-            newAccount.setAmount(BigDecimal.valueOf(00.0));
-            newUser.agregarCuenta(newAccount);
-            // Guardar el usuario y la cuenta en la base de datos
-            User userSaved = userRepository.save(newUser);
-
-
+            User userSaved = repository.save(UserMapper.dtoToUser(userDto));
             return UserMapper.userToDto(userSaved);
         } else{
             throw new UserNotExistsException("Usuario con mail: " + userDto.getEmail() + " ya existe");
         }
+
     }
 
 
     public UserDTO getUserById(Long id) {
-        User entity = userRepository.findById(id).get();
+        User entity = repository.findById(id).get();
         return UserMapper.userToDto(entity);
     }
 
     public String deleteUser(Long id){
-
-        User user = userRepository.findById(id).orElse(null);
-        if (user != null) {
-            List<Account> accounts = user.getAccounts();
-            // Eliminar cada cuenta asociada al usuario
-            for (Account account : accounts) {
-                accountRepository.deleteById(account.getId());
-            }
-            userRepository.deleteById(id);
-            return "El usuario con id: " + id + " y su cuenta asociada han sido eliminados";
+        if (repository.existsById(id)){
+            repository.deleteById(id);
+            return "El usuario con id: " + id + " ha sido eliminado";
         } else {
             throw new UserNotExistsException("El usuario a eliminar elegido no existe");
         }
@@ -92,8 +59,8 @@ public class UserService {
     }
 
     public UserDTO updateUser(Long id, UserDTO dto) {
-        if (userRepository.existsById(id)){
-            User userToModify = userRepository.findById(id).get();
+        if (repository.existsById(id)){
+            User userToModify = repository.findById(id).get();
             // Validar qué datos no vienen en null para setearlos al objeto ya creado
 
             // Logica del Patch
@@ -121,7 +88,7 @@ public class UserService {
                 userToModify.setDni(dto.getDni());
             }
 
-            User userModified = userRepository.save(userToModify);
+            User userModified = repository.save(userToModify);
 
             return UserMapper.userToDto(userModified);
         }
@@ -131,6 +98,6 @@ public class UserService {
 
     // Validar que existan usuarios unicos por mail
     public User validateUserByEmail(UserDTO dto){
-        return userRepository.findByEmail(dto.getEmail());
+        return repository.findByEmail(dto.getEmail());
     }
 }

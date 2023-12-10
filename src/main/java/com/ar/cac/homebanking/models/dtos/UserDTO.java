@@ -27,8 +27,6 @@ public class UserDTO {
 
     private String dni;
 
-    private List<AccountDTO> accounts;
-
-
+    private List<Account> lista;
 
 }
