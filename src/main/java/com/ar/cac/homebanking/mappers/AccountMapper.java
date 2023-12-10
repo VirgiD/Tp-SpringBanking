@@ -6,9 +6,12 @@ import com.ar.cac.homebanking.models.dtos.AccountDTO;
 import com.ar.cac.homebanking.repositories.AccountRepository;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import lombok.experimental.UtilityClass;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @UtilityClass
 public class AccountMapper {
+    @Autowired
+    private UserRepository userRepository;
 
     // TODO: REFACTOR BUILDER
     public AccountDTO accountToDto(Account account){
@@ -29,6 +32,14 @@ public class AccountMapper {
         account.setCbu(dto.getCbu());
         account.setAmount(dto.getAmount());
         //account.setOwner(dto.getUsuarioId());
+        Long userId = dto.getUsuarioId();
+
+        if (userId != null) {
+            // Buscar el usuario por ID y asignarlo como propietario
+            User owner = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + userId));
+            account.setOwner(owner);
+        }
         return account;
     }
 }
