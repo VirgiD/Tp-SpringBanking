@@ -1,4 +1,4 @@
-package com.ar.cac.homebanking.models;
+package com.ar.cac.homebanking.utilities;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +22,6 @@ public class GeneradorCbuAlias {
         }
 
         return alias.toString();
-
     }
 
     public static String generarCbuAleatorio() {

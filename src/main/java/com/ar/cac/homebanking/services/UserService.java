@@ -3,23 +3,18 @@ package com.ar.cac.homebanking.services;
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.UserMapper;
 import com.ar.cac.homebanking.models.Account;
-import com.ar.cac.homebanking.models.GeneradorCbuAlias;
+import com.ar.cac.homebanking.utilities.GeneradorCbuAlias;
 import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.models.enums.AccountType;
 import com.ar.cac.homebanking.repositories.AccountRepository;
 import com.ar.cac.homebanking.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
