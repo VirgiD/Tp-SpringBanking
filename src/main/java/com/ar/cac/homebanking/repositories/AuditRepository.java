@@ -1,4 +1,10 @@
 package com.ar.cac.homebanking.repositories;
 
-public interface AuditRepository {
+import com.ar.cac.homebanking.models.Audit;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AuditRepository extends JpaRepository<Audit, Long> {
+
 }
