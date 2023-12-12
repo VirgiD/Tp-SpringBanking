@@ -12,7 +12,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
-public class Atm {
+public class FuncionCajeroExpress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "atm_id")

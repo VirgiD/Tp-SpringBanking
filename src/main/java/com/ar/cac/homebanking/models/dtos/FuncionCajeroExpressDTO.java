@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
-public class AtmDTO {
+public class FuncionCajeroExpressDTO {
 
     private Long id;
 
