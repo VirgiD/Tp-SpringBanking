@@ -9,6 +9,7 @@ import com.ar.cac.homebanking.models.dtos.UserDTO;
 import com.ar.cac.homebanking.models.enums.AccountType;
 import com.ar.cac.homebanking.repositories.AccountRepository;
 import com.ar.cac.homebanking.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserService {
     // Inyectar una instancia del Repositorio
     private final UserRepository userRepository;
@@ -55,8 +57,6 @@ public class UserService {
             newUser.agregarCuenta(newAccount);
             // Guardar el usuario y la cuenta en la base de datos
             User userSaved = userRepository.save(newUser);
-
-
             return UserMapper.userToDto(userSaved);
         } else{
             throw new UserNotExistsException("Usuario con mail: " + userDto.getEmail() + " ya existe");

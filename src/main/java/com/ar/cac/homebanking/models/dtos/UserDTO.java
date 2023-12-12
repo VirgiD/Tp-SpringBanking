@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class UserDTO {
 
     private Long id;
@@ -27,6 +28,6 @@ public class UserDTO {
 
     private String dni;
 
-    private List<Account> lista;
+    private List<AccountDTO> accounts;
 
 }
