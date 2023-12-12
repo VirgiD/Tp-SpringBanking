@@ -1,14 +1,14 @@
 package com.ar.cac.homebanking.mappers;
 
 import com.ar.cac.homebanking.models.Audit;
-import com.ar.cac.homebanking.models.dtos.AuditDTO;
+import com.ar.cac.homebanking.models.dtos.AuditAccountDTO;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class AuditMapper {
+public class AuditAccountMapper {
 
     //Metodos para transformar Objetos
-    public static Audit dtoToAudit(AuditDTO dto){
+    public static Audit dtoToAudit(AuditAccountDTO dto){
         Audit audit = new Audit();
         audit.setId_owner(dto.getId_owner());
         audit.setType(dto.getType());
@@ -22,8 +22,8 @@ public class AuditMapper {
         return audit;
     }
 
-    public static AuditDTO auditToDto(Audit audit){
-        AuditDTO dto = new AuditDTO();
+    public static AuditAccountDTO auditToDto(Audit audit){
+        AuditAccountDTO dto = new AuditAccountDTO();
         dto.setId_owner(audit.getId_owner());
         dto.setType(audit.getType());
         dto.setAmount(audit.getAmount());
