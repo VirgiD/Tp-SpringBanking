@@ -20,8 +20,8 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AccountDTO>> getAccounts(){
-        List<AccountDTO> lista = service.getAccounts();
+    public ResponseEntity<List<AccountDTO>> getAccounts(@RequestParam Long Userid){
+        List<AccountDTO> lista = service.getAccountsByUserId(Userid);
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
