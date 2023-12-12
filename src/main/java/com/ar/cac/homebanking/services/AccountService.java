@@ -3,18 +3,16 @@ package com.ar.cac.homebanking.services;
 import com.ar.cac.homebanking.exceptions.UserNotExistsException;
 import com.ar.cac.homebanking.mappers.AccountMapper;
 import com.ar.cac.homebanking.models.Account;
-import com.ar.cac.homebanking.utilities.GeneradorCbuAlias;
 import com.ar.cac.homebanking.models.User;
 import com.ar.cac.homebanking.models.dtos.AccountDTO;
 import com.ar.cac.homebanking.repositories.AccountRepository;
 import com.ar.cac.homebanking.repositories.UserRepository;
+import com.ar.cac.homebanking.utilities.GeneradorCbuAlias;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Service
 public class AccountService {
@@ -100,6 +98,5 @@ public class AccountService {
         }
         return null;
     }
-
 
 }
