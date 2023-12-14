@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/audits")
+@RequestMapping("/api/audits/accounts")
 public class AuditAccountController {
     @Autowired
     private final AuditAccountService service;

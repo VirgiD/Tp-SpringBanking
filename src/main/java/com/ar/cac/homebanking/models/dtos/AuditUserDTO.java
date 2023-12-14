@@ -13,6 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AuditUserDTO {
     private Long id;
+    private Long id_owner;
     private String action;
     private String tabla;
     private String email;
