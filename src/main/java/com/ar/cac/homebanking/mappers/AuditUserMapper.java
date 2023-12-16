@@ -10,6 +10,7 @@ import lombok.experimental.UtilityClass;
 public class AuditUserMapper {
     public static AuditUser dtoToAuditUser (AuditUserDTO dto){
     AuditUser auditUser = new AuditUser();
+        auditUser.setId_owner(dto.getId_owner());
         auditUser.setAction(dto.getAction());
         auditUser.setTabla(dto.getTabla());
         auditUser.setId(dto.getId());
@@ -24,6 +25,7 @@ public class AuditUserMapper {
 
     public static AuditUserDTO auditUserDTO(AuditUser auditUser){
         AuditUserDTO dto = new AuditUserDTO();
+        dto.setId_owner(auditUser.getId_owner());
         dto.setAction(auditUser.getAction());
         dto.setTabla(auditUser.getTabla());
         dto.setId(auditUser.getId());

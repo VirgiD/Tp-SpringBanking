@@ -16,6 +16,7 @@ public class AuditUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long id_owner;
     private String action;
     private String tabla;
     private String email;
